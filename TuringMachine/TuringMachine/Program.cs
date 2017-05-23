@@ -21,11 +21,12 @@ namespace ConsoleApplication1
             //TuringMachinePlusNew(15, 5);
             //TuringMachineMinusNew(15, 5);
             //TuringMachineMultiplyNew(5, 3);
-            TuringMachineDivideNew(50, 4);
-            TuringMachineDivideNew(51, 5);
-            TuringMachineDivideNew(52, 6);
-           Console.WriteLine(TuringMachineDivideNew(56, 7));
-
+            // TuringMachineDivideNew(50, 4);
+            // TuringMachineDivideNew(51, 5);
+            // TuringMachineDivideNew(52, 6);
+            //Console.WriteLine(TuringMachineDivideNew(56, 7));
+            Console.WriteLine(SymbolTuringMachinePlusNew(2,5));
+            
 
         }
 
@@ -605,6 +606,121 @@ namespace ConsoleApplication1
             }
 
             return result;
+        }
+
+
+        ///    2 is + 
+        ///    3 is - 
+        ///    4 is * 
+        ///    5 is / 
+        ///    6 is =
+
+        static int SymbolTuringMachinePlusNew(int x, int y)
+        {
+            List<TuringMachineNode> PlusLogic = new List<TuringMachineNode>();
+
+            PlusLogic.Add(new TuringMachineNode(0, 1, 0, HeadDirection.Right, 1));
+            PlusLogic.Add(new TuringMachineNode(0, 0, 0, HeadDirection.Right, 1));
+
+
+            PlusLogic.Add(new TuringMachineNode(1, 1, 1, HeadDirection.Right, 1));
+            PlusLogic.Add(new TuringMachineNode(1, 2, 2, HeadDirection.Right, 1));
+            PlusLogic.Add(new TuringMachineNode(1, 6, 6, HeadDirection.Right, 1));
+            PlusLogic.Add(new TuringMachineNode(1, 0, 1, HeadDirection.Left, 2));
+
+            PlusLogic.Add(new TuringMachineNode(2, 1, 1, HeadDirection.Left, 2));
+            PlusLogic.Add(new TuringMachineNode(2, 2, 2, HeadDirection.Left, 2));
+            PlusLogic.Add(new TuringMachineNode(2, 6, 6, HeadDirection.Left, 2));
+            PlusLogic.Add(new TuringMachineNode(2, 0, 0, HeadDirection.Right, 3));
+
+            PlusLogic.Add(new TuringMachineNode(3, 6, 1, HeadDirection.Stay, -1));
+            PlusLogic.Add(new TuringMachineNode(3, 1, 0, HeadDirection.Right, 1));
+            PlusLogic.Add(new TuringMachineNode(3, 2, 0, HeadDirection.Right, 0));
+
+
+            //////////////////////////////////////////////////////////////////////////////////////
+
+            int result = 0;
+
+            List<int> track = new List<int>();
+
+            for (int i = 0; i <= x + y; i++)
+            {
+                track.Add(0);
+            }
+
+            for (int i = 0; i <= x; i++)
+            {
+                track.Add(1);
+            }
+
+            track.Add(2);
+
+            for (int i = 0; i <= y; i++)
+            {
+                track.Add(1);
+            }
+
+            track.Add(6);
+
+            for (int i = 0; i <= 2*(x + y); i++)
+            {
+                track.Add(0);
+            }
+
+            int currentState = 0;
+            int currentRead = 0;
+            int index = x + y;
+
+            int count = 0;
+
+            try
+            {
+                while (currentState != -1)
+                {
+                    currentRead = track[index];
+                    TuringMachineNode temp = PlusLogic.Find(t => t.currentState == currentState && t.read == currentRead);
+                    track[index] = temp.write;
+                    currentState = temp.nextState;
+                    index += (int)temp.headDirection;
+                    count++;
+                    if(count == 200)
+                    {
+                        var t = -1;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                var t = e.Message;
+            }
+
+            for (int i = 0; i < track.Count; i++)
+            {
+                result += track[i];
+            }
+            // var temp = PlusLogic.Find(t => t.currentState == currentState && t.read == currentRead);
+            //currentState = temp.nextState;
+            //index += (int)temp.headDirection;
+
+            return result;
+        }
+
+        static int SymbolTuringMachineMinusNew(int x, int y)
+        {
+            return 0;
+        }
+
+        static int SymbolTuringMachineMultiplyNew(int x, int y)
+        {
+            return 0;
+
+        }
+
+        static int SymbolTuringMachineDivideNew(int x, int y)
+        {
+            return 0;
+
         }
     }
 
